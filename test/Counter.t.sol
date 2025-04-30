@@ -3,6 +3,8 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 import "solady/utils/MerkleProofLib.sol";
+import {console} from "forge-std/console.sol";
+
 
 contract MerkleProofGasTest is Test {
     bytes32 public root;
@@ -20,7 +22,10 @@ contract MerkleProofGasTest is Test {
 
         // Extract the proof elements (remaining tree nodes after the root).
         bytes32[] memory tree = abi.decode(vm.parseJson(json, ".tree"), (bytes32[]));
-        for (uint256 i = 1; i < tree.length; i++) {
+        console.log("tree length: ", tree.length);
+        console.logBytes32(root);
+        console.logBytes32(tree[0]);  
+        for (uint256 i = 0; i < tree.length; i++) {
             proof.push(tree[i]);
         }
     }
