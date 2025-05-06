@@ -10,6 +10,6 @@ forge-std = "1.9.6"
 solady = "0.1.16"
 
 [rpc_endpoints]
-base = "https://8453.rpc.thirdweb.com/Rb2VlJbNi3XVy5uzPVee0ow-pGFqG4XGaagK4dP0bsVhdqKAS6e7iRNRYi1-Bew9PRmP1Ni_lU5drxOLPqgtLQ"
+base = "https://8453.rpc.thirdweb.com/{THIRDWEB_KEY}"
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options

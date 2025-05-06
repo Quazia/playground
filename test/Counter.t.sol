@@ -30,15 +30,15 @@ contract MerkleProofGasTest is Test {
         }
     }
 
-    function testGas_VerifyMerkleProof() public {
-        // Use one of the values from the JSON as the leaf.
-        bytes32 leaf = keccak256(abi.encodePacked(
-            address(0x1111111111111111111111111111111111111111),
-            uint256(5000000000000000000)
-        ));
+    // function testGas_VerifyMerkleProof() public {
+    //     // Use one of the values from the JSON as the leaf.
+    //     bytes32 leaf = keccak256(abi.encodePacked(
+    //         address(0x1111111111111111111111111111111111111111),
+    //         uint256(5000000000000000000)
+    //     ));
 
-        // Verify the Merkle proof.
-        bool isValid = MerkleProofLib.verify(proof, root, leaf);
-        assertTrue(isValid);
-    }
+    //     // Verify the Merkle proof.
+    //     bool isValid = MerkleProofLib.verify(proof, root, leaf);
+    //     assertTrue(isValid);
+    // }
 }

@@ -1,0 +1,7 @@
+{
+  "scores": [
+    { "fid": 1, "score": 100 },
+    { "fid": 2, "score": 150 },
+    { "fid": 3, "score": 200 }
+  ]
+}
