@@ -256,10 +256,17 @@ contract BaseGasTest is Test {
         uint56 v1L1Gas = BASE_GAS.getL1GasUsed(payloadV1);
         emit log_named_uint("V1 L1 fee (wei)", v1L1Fee);
         emit log_named_uint("V1 L1 gas used", v1L1Gas);
-        vm.startSnapshotGas("Combined_V1");
+        vm.startSnapshotGas("Combined_V1_COLD");
         cV1.setScores(scores);
         uint256 v1L2 = vm.stopSnapshotGas();
-        emit log_named_uint("V1 L2 gas used", v1L2);
+        emit log_named_uint("V1_COLD L2 gas used", v1L2);
+        // V1 (warm) payload
+        // We run this a second time since the first run will be the first
+        // time the storage slots are accessed, and the gas will be higher.
+        vm.startSnapshotGas("Combined_V1_WARM");
+        cV1.setScores(scores);
+        v1L2 = vm.stopSnapshotGas();
+        emit log_named_uint("V1_WARM L2 gas used", v1L2);
 
         // FLZ‐compressed payload
         bytes memory raw = abi.encode(scores);
@@ -275,10 +282,14 @@ contract BaseGasTest is Test {
         uint56 flzL1Gas = BASE_GAS.getL1GasUsed(payloadFLZ);
         emit log_named_uint("FLZ L1 fee (wei)", flzL1Fee);
         emit log_named_uint("FLZ L1 gas used", flzL1Gas);
-        vm.startSnapshotGas("Combined_FLZ");
+        vm.startSnapshotGas("Combined_FLZ_COLD");
         cZip.setScoresFLZ(compressedFLZ);
         uint256 flzL2 = vm.stopSnapshotGas();
-        emit log_named_uint("FLZ L2 gas used", flzL2);
+        emit log_named_uint("FLZ_COLD L2 gas used", flzL2);
+        vm.startSnapshotGas("Combined_FLZ_WARM");
+        cZip.setScoresFLZ(compressedFLZ);
+        flzL2 = vm.stopSnapshotGas();
+        emit log_named_uint("FLZ_WARM L2 gas used", flzL2);
 
         // CD‐compressed payload
         bytes memory compressedCD = LibZip.cdCompress(raw);
