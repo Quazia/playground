@@ -1,6 +1,8 @@
 pragma solidity ^0.8.26;
 import "forge-std/Test.sol";
 import "../src/naive-fid-setter/NeynarUserScoresV1.sol";
+import "../src/compressed-fid-setter/NeynarUserScoresZip.sol";
+import {LibZip} from "solady/utils/LibZip.sol";
 
 interface IOptimismGasOracle {
     function getL1Fee(bytes memory data) external view returns (uint256);
@@ -10,35 +12,14 @@ interface IOptimismGasOracle {
 contract BaseGasTest is Test {
     IOptimismGasOracle constant BASE_GAS =
         IOptimismGasOracle(0x420000000000000000000000000000000000000F);
-    NeynarUserScoresV1 c;
+    NeynarUserScoresV1 cV1;
+    NeynarUserScoresZip cZip;
 
     function setUp() public {
-        // select an Arbitrum fork using your ARB_RPC_URL env var
         vm.createSelectFork(vm.envString("BASE_RPC_URL"));
-
-        // now the precompile at 0x...006C exists
-        c = new NeynarUserScoresV1();
+        cV1 = new NeynarUserScoresV1();
+        cZip = new NeynarUserScoresZip(); 
     }
-
-    // function testSetScoreGas() public {
-    //     // load and parse JSON file
-    //     string memory json = vm.readFile("./test/scores.json");
-    //     bytes memory raw = vm.parseJson(json, ".scores");
-    //     NeynarUserScoresV1.SetScore[] memory scoresToAdd =
-    //         abi.decode(raw, (NeynarUserScoresV1.SetScore[]));
-
-    //     bytes memory payload = abi.encodeWithSelector(
-    //         c.setScores.selector,
-    //         scoresToAdd
-    //     );
-
-    //     uint256 l1Fee = BASE_GAS.getL1Fee(payload);
-    //     uint56 l1GasUsed = BASE_GAS.getL1GasUsed(payload);
-
-    //     emit log_named_uint("L1 fee (wei)", l1Fee);
-    //     emit log_named_uint("L1 gas used", l1GasUsed);
-    //     // Forge will print L2 gasUsed when run with --gas-report
-    // }
 
     function testSetScoreGasFuzz(uint256 totalScores) public {
         // bound number of entries between 1 and 1000
@@ -66,7 +47,7 @@ contract BaseGasTest is Test {
 
         // batch‐encode and measure L1 fee
         bytes memory payload = abi.encodeWithSelector(
-            c.setScores.selector,
+            cV1.setScores.selector,
             scoresToAdd
         );
         uint256 l1Fee = BASE_GAS.getL1Fee(payload);
@@ -75,11 +56,91 @@ contract BaseGasTest is Test {
         emit log_named_uint("L1 fee (wei)", l1Fee);
         emit log_named_uint("L1 gas used", l1GasUsed);
         uint256 gasBefore = gasleft();
-        c.setScores(scoresToAdd);
+        cV1.setScores(scoresToAdd);
         uint256 l2GasUsed = gasBefore - gasleft();
         emit log_named_uint("L2 gas used", l2GasUsed);
         assertLt(l2GasUsed, block.gaslimit);
 
+    }
+
+    /// @notice Compare L1/L2 gas for FLZ-compressed batch setter
+    function testSetScoreGasFuzz_FLZ(uint256 totalScores) public {
+        uint256 count = bound(totalScores, 1, 2800);
+        NeynarUserScoresZip.SetScore[] memory scoresToAdd =
+            new NeynarUserScoresZip.SetScore[](count);
+
+        for (uint256 i = 0; i < count; i++) {
+            uint232 fid = uint232(bound(
+                uint256(keccak256(abi.encodePacked(totalScores, i))),
+                0,
+                1_000_000
+            ));
+            uint24 scoreVal = uint24(
+                bound(
+                    uint256(keccak256(abi.encodePacked(totalScores, i, fid))),
+                    1,
+                    1000
+                )
+            );
+            scoresToAdd[i] = NeynarUserScoresZip.SetScore(fid, scoreVal);
+        }
+
+        bytes memory raw = abi.encode(scoresToAdd);
+        bytes memory compressed = LibZip.flzCompress(raw);
+        bytes memory payload =
+            abi.encodeWithSelector(cZip.setScoresFLZ.selector, compressed);
+
+        uint256 l1Fee = BASE_GAS.getL1Fee(payload);
+        uint56 l1GasUsed = BASE_GAS.getL1GasUsed(payload);
+        emit log_named_uint("FLZ Total Scores", count);
+        emit log_named_uint("FLZ L1 fee (wei)", l1Fee);
+        emit log_named_uint("FLZ L1 gas used", l1GasUsed);
+
+        uint256 gasBefore = gasleft();
+        cZip.setScoresFLZ(compressed);
+        uint256 l2GasUsed = gasBefore - gasleft();
+        emit log_named_uint("FLZ L2 gas used", l2GasUsed);
+        assertLt(l2GasUsed, block.gaslimit);
+    }
+
+    /// @notice Compare L1/L2 gas for CD-compressed batch setter
+    function testSetScoreGasFuzz_CD(uint256 totalScores) public {
+        uint256 count = bound(totalScores, 1, 2800);
+        NeynarUserScoresZip.SetScore[] memory scoresToAdd =
+            new NeynarUserScoresZip.SetScore[](count);
+
+        for (uint256 i = 0; i < count; i++) {
+            uint232 fid = uint232(bound(
+                uint256(keccak256(abi.encodePacked(totalScores, i))),
+                0,
+                1_000_000
+            ));
+            uint24 scoreVal = uint24(
+                bound(
+                    uint256(keccak256(abi.encodePacked(totalScores, i, fid))),
+                    1,
+                    1000
+                )
+            );
+            scoresToAdd[i] = NeynarUserScoresZip.SetScore(fid, scoreVal);
+        }
+
+        bytes memory raw = abi.encode(scoresToAdd);
+        bytes memory compressed = LibZip.cdCompress(raw);
+        bytes memory payload =
+            abi.encodeWithSelector(cZip.setScoresCD.selector, compressed);
+
+        uint256 l1Fee = BASE_GAS.getL1Fee(payload);
+        uint56 l1GasUsed = BASE_GAS.getL1GasUsed(payload);
+        emit log_named_uint("CD Total Scores", count);
+        emit log_named_uint("CD L1 fee (wei)", l1Fee);
+        emit log_named_uint("CD L1 gas used", l1GasUsed);
+
+        uint256 gasBefore = gasleft();
+        cZip.setScoresCD(compressed);
+        uint256 l2GasUsed = gasBefore - gasleft();
+        emit log_named_uint("CD L2 gas used", l2GasUsed);
+        assertLt(l2GasUsed, block.gaslimit);
     }
 
     function testMaxScoresUntilGasError() public {
@@ -97,12 +158,12 @@ contract BaseGasTest is Test {
             }
 
             // encode calldata
-            bytes memory payload = abi.encodeWithSelector(c.setScores.selector, scores);
+            bytes memory payload = abi.encodeWithSelector(cV1.setScores.selector, scores);
             emit log_named_uint("Total Scores", count);
 
             vm.startSnapshotGas("testMaxScoresUntilGasError");
             // low‐level call so we can catch OOG/revert
-            (bool ok, ) = address(c).call(payload);
+            (bool ok, ) = address(cV1).call(payload);
             uint256 l2GasUsed = vm.stopSnapshotGas();
             emit log_named_uint("L2 gas used", l2GasUsed);
 
