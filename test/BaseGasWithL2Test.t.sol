@@ -233,4 +233,42 @@ contract BaseGasTest is Test {
         vm.writeJson(vm.serializeBytes(".payload", "entry", payload), "./test/maxPayload_CD.json");
         emit log_named_uint("CD Max batch size before revert", count - 1);
     }
+
+    /// @notice Build a single max‐batch, generate V1, FLZ and CD payloads, and save each to JSON
+    function testSaveCombinedMaxPayloads() public {
+        uint256 count = 2000;
+        // Build identical batch for all three
+        NeynarUserScoresV1.SetScore[] memory scores =
+            new NeynarUserScoresV1.SetScore[](count);
+        for (uint256 i = 0; i < count; i++) {
+            scores[i] = NeynarUserScoresV1.SetScore({ fid: i, score: 1 });
+        }
+
+        // V1 (naive) payload
+        bytes memory payloadV1 =
+            abi.encodeWithSelector(cV1.setScores.selector, scores);
+        vm.writeJson(
+            vm.serializeBytes(".payload", "entry", payloadV1),
+            "./test/maxCombinedPayload_V1.json"
+        );
+
+        // FLZ‐compressed payload
+        bytes memory raw = abi.encode(scores);
+        bytes memory compressedFLZ = LibZip.flzCompress(raw);
+        bytes memory payloadFLZ =
+            abi.encodeWithSelector(cZip.setScoresFLZ.selector, compressedFLZ);
+        vm.writeJson(
+            vm.serializeBytes(".payload", "entry", payloadFLZ),
+            "./test/maxCombinedPayload_FLZ.json"
+        );
+
+        // CD‐compressed payload
+        bytes memory compressedCD = LibZip.cdCompress(raw);
+        bytes memory payloadCD =
+            abi.encodeWithSelector(cZip.setScoresCD.selector, compressedCD);
+        vm.writeJson(
+            vm.serializeBytes(".payload", "entry", payloadCD),
+            "./test/maxCombinedPayload_CD.json"
+        );
+    }
 }
