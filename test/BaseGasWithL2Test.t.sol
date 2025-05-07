@@ -171,7 +171,7 @@ contract BaseGasTest is Test {
             uint56 l1GasUsed = BASE_GAS.getL1GasUsed(payload);
             emit log_named_uint("L1 fee (wei)", l1Fee);
             emit log_named_uint("L1 gas used", l1GasUsed);
-
+            
             // I absolutely hate that these are different
             uint256 MAX_L2_GAS_BASE = 130_000_000;
             uint256 MAX_L2_GAS_BASE_SEPOLIA = 60_000_000;
@@ -180,5 +180,57 @@ contract BaseGasTest is Test {
             // report the largest batch that did not revert
             emit log_named_uint("Max batch size before revert", count - 1);
         // }
+    }
+
+    /// @notice non-fuzz max-batch gas test for FLZ-compressed setter
+    function testMaxScoresUntilGasError_FLZ() public {
+        uint256 count = 2000;
+        NeynarUserScoresZip.SetScore[] memory scores = new NeynarUserScoresZip.SetScore[](count);
+        for (uint256 i = 0; i < count; ++i) {
+            scores[i] = NeynarUserScoresZip.SetScore({ fid: uint232(i), score: 1 });
+        }
+        bytes memory raw = abi.encode(scores);
+        bytes memory compressed = LibZip.flzCompress(raw);
+        bytes memory payload = abi.encodeWithSelector(cZip.setScoresFLZ.selector, compressed);
+
+        emit log_named_uint("FLZ Total Scores", count);
+        vm.startSnapshotGas("testMaxScoresUntilGasError_FLZ");
+        (bool ok, ) = address(cZip).call(payload);
+        uint256 l2GasUsed = vm.stopSnapshotGas();
+        emit log_named_uint("FLZ L2 gas used", l2GasUsed);
+
+        uint256 l1Fee = BASE_GAS.getL1Fee(payload);
+        uint56 l1GasUsed = BASE_GAS.getL1GasUsed(payload);
+        emit log_named_uint("FLZ L1 fee (wei)", l1Fee);
+        emit log_named_uint("FLZ L1 gas used", l1GasUsed);
+
+        vm.writeJson(vm.serializeBytes(".payload", "entry", payload), "./test/maxPayload_FLZ.json");
+        emit log_named_uint("FLZ Max batch size before revert", count - 1);
+    }
+
+    /// @notice non-fuzz max-batch gas test for CD-compressed setter
+    function testMaxScoresUntilGasError_CD() public {
+        uint256 count = 2000;
+        NeynarUserScoresZip.SetScore[] memory scores = new NeynarUserScoresZip.SetScore[](count);
+        for (uint256 i = 0; i < count; ++i) {
+            scores[i] = NeynarUserScoresZip.SetScore({ fid: uint232(i), score: 1 });
+        }
+        bytes memory raw = abi.encode(scores);
+        bytes memory compressed = LibZip.cdCompress(raw);
+        bytes memory payload = abi.encodeWithSelector(cZip.setScoresCD.selector, compressed);
+
+        emit log_named_uint("CD Total Scores", count);
+        vm.startSnapshotGas("testMaxScoresUntilGasError_CD");
+        (bool ok, ) = address(cZip).call(payload);
+        uint256 l2GasUsed = vm.stopSnapshotGas();
+        emit log_named_uint("CD L2 gas used", l2GasUsed);
+
+        uint256 l1Fee = BASE_GAS.getL1Fee(payload);
+        uint56 l1GasUsed = BASE_GAS.getL1GasUsed(payload);
+        emit log_named_uint("CD L1 fee (wei)", l1Fee);
+        emit log_named_uint("CD L1 gas used", l1GasUsed);
+
+        vm.writeJson(vm.serializeBytes(".payload", "entry", payload), "./test/maxPayload_CD.json");
+        emit log_named_uint("CD Max batch size before revert", count - 1);
     }
 }
