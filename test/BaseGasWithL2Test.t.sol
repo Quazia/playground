@@ -234,7 +234,7 @@ contract BaseGasTest is Test {
         emit log_named_uint("CD Max batch size before revert", count - 1);
     }
 
-    /// @notice Build a single max‐batch, generate V1, FLZ and CD payloads, and save each to JSON
+    /// @notice Build a single max‐batch, generate V1, FLZ and CD payloads, save each to JSON, and snapshot gas
     function testSaveCombinedMaxPayloads() public {
         uint256 count = 2000;
         // Build identical batch for all three
@@ -251,6 +251,15 @@ contract BaseGasTest is Test {
             vm.serializeBytes(".payload", "entry", payloadV1),
             "./test/maxCombinedPayload_V1.json"
         );
+        emit log_named_uint("V1 Total Scores", count);
+        uint256 v1L1Fee = BASE_GAS.getL1Fee(payloadV1);
+        uint56 v1L1Gas = BASE_GAS.getL1GasUsed(payloadV1);
+        emit log_named_uint("V1 L1 fee (wei)", v1L1Fee);
+        emit log_named_uint("V1 L1 gas used", v1L1Gas);
+        vm.startSnapshotGas("Combined_V1");
+        cV1.setScores(scores);
+        uint256 v1L2 = vm.stopSnapshotGas();
+        emit log_named_uint("V1 L2 gas used", v1L2);
 
         // FLZ‐compressed payload
         bytes memory raw = abi.encode(scores);
@@ -261,6 +270,15 @@ contract BaseGasTest is Test {
             vm.serializeBytes(".payload", "entry", payloadFLZ),
             "./test/maxCombinedPayload_FLZ.json"
         );
+        emit log_named_uint("FLZ Total Scores", count);
+        uint256 flzL1Fee = BASE_GAS.getL1Fee(payloadFLZ);
+        uint56 flzL1Gas = BASE_GAS.getL1GasUsed(payloadFLZ);
+        emit log_named_uint("FLZ L1 fee (wei)", flzL1Fee);
+        emit log_named_uint("FLZ L1 gas used", flzL1Gas);
+        vm.startSnapshotGas("Combined_FLZ");
+        cZip.setScoresFLZ(compressedFLZ);
+        uint256 flzL2 = vm.stopSnapshotGas();
+        emit log_named_uint("FLZ L2 gas used", flzL2);
 
         // CD‐compressed payload
         bytes memory compressedCD = LibZip.cdCompress(raw);
@@ -270,5 +288,14 @@ contract BaseGasTest is Test {
             vm.serializeBytes(".payload", "entry", payloadCD),
             "./test/maxCombinedPayload_CD.json"
         );
+        emit log_named_uint("CD Total Scores", count);
+        uint256 cdL1Fee = BASE_GAS.getL1Fee(payloadCD);
+        uint56 cdL1Gas = BASE_GAS.getL1GasUsed(payloadCD);
+        emit log_named_uint("CD L1 fee (wei)", cdL1Fee);
+        emit log_named_uint("CD L1 gas used", cdL1Gas);
+        vm.startSnapshotGas("Combined_CD");
+        cZip.setScoresCD(compressedCD);
+        uint256 cdL2 = vm.stopSnapshotGas();
+        emit log_named_uint("CD L2 gas used", cdL2);
     }
 }
