@@ -249,7 +249,7 @@ contract BaseGasTest is Test {
             abi.encodeWithSelector(cV1.setScores.selector, scores);
         vm.writeJson(
             vm.serializeBytes(".payload", "entry", payloadV1),
-            "./test/maxCombinedPayload_V1.json"
+            "./test/maxPayload_V1.json"
         );
         emit log_named_uint("V1 Total Scores", count);
         uint256 v1L1Fee = BASE_GAS.getL1Fee(payloadV1);
@@ -275,7 +275,7 @@ contract BaseGasTest is Test {
             abi.encodeWithSelector(cZip.setScoresFLZ.selector, compressedFLZ);
         vm.writeJson(
             vm.serializeBytes(".payload", "entry", payloadFLZ),
-            "./test/maxCombinedPayload_FLZ.json"
+            "./test/maxPayload_FLZ.json"
         );
         emit log_named_uint("FLZ Total Scores", count);
         uint256 flzL1Fee = BASE_GAS.getL1Fee(payloadFLZ);
@@ -297,7 +297,7 @@ contract BaseGasTest is Test {
             abi.encodeWithSelector(cZip.setScoresCD.selector, compressedCD);
         vm.writeJson(
             vm.serializeBytes(".payload", "entry", payloadCD),
-            "./test/maxCombinedPayload_CD.json"
+            "./test/maxPayload_CD.json"
         );
         emit log_named_uint("CD Total Scores", count);
         uint256 cdL1Fee = BASE_GAS.getL1Fee(payloadCD);
