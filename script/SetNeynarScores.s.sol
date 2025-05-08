@@ -22,9 +22,13 @@ contract SetNeynarScoresScript is Script {
         console.log("rawPayload hex:");
         console.logBytes(rawPayload);
 
-        // execute the exact calldata
+        // execute the exact calldata (cold)
         (bool ok, ) = address(scoresContract).call(rawPayload);
-        require(ok, "call failed");
+        require(ok, "cold call failed");
+
+        // execute again to measure warm-call costs
+        (bool ok2, ) = address(scoresContract).call(rawPayload);
+        require(ok2, "warm call failed");
 
         vm.stopBroadcast();
     }
