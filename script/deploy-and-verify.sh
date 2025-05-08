@@ -2,9 +2,7 @@
 set -e
 
 RPC_URL="https://base.drpc.org"
-API_KEY="KWQ7H2N2HNPEX3JU7WWKGIIKGYWE1M118N"
 CHAIN="base"
-PRIVATE_KEY="0xb73637924863715d15237c92d8714493cd3f41bb1aaac9ca4e94f27b89caa3a0"
 
 # V1 (naive setter)
 forge script script/SetNeynarScores.s.sol:SetNeynarScoresScript \

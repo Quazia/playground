@@ -19,8 +19,11 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@farcaster/hub-web": "^0.9.7",
     "@openzeppelin/merkle-tree": "^1.0.8",
+    "@privy-io/js-sdk-core": "^0.50.0",
     "@types/jsonwebtoken": "^9.0.9",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "viem": "^2.29.1"
   }
 }
