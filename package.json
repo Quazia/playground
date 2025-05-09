@@ -19,6 +19,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@farcaster/hub-nodejs": "^0.13.5",
     "@farcaster/hub-web": "^0.9.7",
     "@openzeppelin/merkle-tree": "^1.0.8",
     "@privy-io/js-sdk-core": "^0.50.0",
