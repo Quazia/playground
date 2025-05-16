@@ -8,12 +8,14 @@ import { optimism } from 'viem/chains'
 import { eip712 } from '@farcaster/hub-web'
 import {
   FarcasterNetwork,
-  makeVerificationAddEthAddress,
 } from '@farcaster/hub-nodejs';
 
 
 // Idk if this needs to be a bigint or not
 const FID = 14206;
+// There are two network distinctions in this signature flow; the FarcasterNetwork (1) and the chainId for Optimisim (10) where we are getting the block hash and signing the message
+const FARCASTER_NETWORK = 1; // Mainnet -> FarcasterNetwork from @farcaster/hub-nodejs
+// We just need a basic public client to get the block hash
 const publicClient = createPublicClient({ chain: optimism, transport: http() })
 
 const getMessageToSign = async (address: `0x${string}`, blockHash?: `0x${string}`, hasDomain = false) => {
@@ -42,7 +44,7 @@ const getMessageToSign = async (address: `0x${string}`, blockHash?: `0x${string}
       domain: { ...eip712.EIP_712_FARCASTER_DOMAIN, chainId: optimism.id },
       types,
       primaryType: 'VerificationClaim',
-      message: { fid: FID, address, blockHash: latestBlockHash, network: FarcasterNetwork.MAINNET, protocol: 0 },
+      message: { fid: FID, address, blockHash: latestBlockHash, network: FARCASTER_NETWORK, protocol: 0 },
     }
     /*
       verifyTypedData({
