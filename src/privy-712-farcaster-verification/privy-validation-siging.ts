@@ -3,7 +3,6 @@ import { Buffer } from 'buffer'
 config()
 import { Address, createPublicClient, hashTypedData, http } from 'viem'
 import { optimism } from 'viem/chains'
-import { read } from 'fs'
 
 
 // Both of these constants should be imported from @farcaster/hub-web but are shown for clarity
@@ -46,11 +45,6 @@ const getMessageToSign = async (address: `0x${string}`, blockHash: `0x${string}`
     }
   }
 
-
-// Here's the section of code where they're running into issues
-// https://github.com/neynarxyz/hub-monorepo/blob/472df705c3e4ac841e015ba877feb7cfa3f911dc/packages/core/src/validations.ts#L490-L529
-// We're doing a contract signature verification so it needs to be verificationType = 1
-// https://github.com/neynarxyz/hub-monorepo/blob/472df705c3e4ac841e015ba877feb7cfa3f911dc/packages/core/src/crypto/eip712.ts#L137
 
 async function main() {
   // We just need a basic public client to get the block hash -- make sure the hash you sign and the hash you post are the same
