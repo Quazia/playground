@@ -25,37 +25,6 @@ function getTransferMessage(fid: bigint, to: `0x${string}`, nonce: bigint, deadl
   );
 }
 
-async function checkTestEndpoint(path: string) {
-  const url = `${API_URL.replace(/\/$/, '')}${path}`;
-  console.log(`Testing endpoint: ${url}`);
-  try {
-    const res = await fetch(url, {
-      headers: { 'x-api-key': NEYNAR_API_KEY },
-    });
-    const rawText = await res.text();
-    let json;
-    try {
-      json = JSON.parse(rawText);
-    } catch (jsonErr) {
-      console.error(`❌ Error parsing JSON from test endpoint ${path}:`, jsonErr);
-      console.error(`❌ Status: ${res.status} ${res.statusText}`);
-      //console.error(`❌ Raw response:`, rawText);
-      return false;
-    }
-    if (json.ok) {
-      console.log(`✅ Test endpoint ${path} OK:`, json);
-      return true;
-    } else {
-      console.error(`❌ Test endpoint ${path} did not return ok:`, json);
-      console.error(`❌ Status: ${res.status} ${res.statusText}`);
-      return false;
-    }
-  } catch (err) {
-    console.error(`❌ Error hitting test endpoint ${path}:`, err);
-    return false;
-  }
-}
-
 async function main() {
   // Polyfill fetch for Node.js < 18
   if (typeof fetch === 'undefined') {
@@ -63,30 +32,8 @@ async function main() {
     global.fetch = (await import('node-fetch')).default;
   }
 
-  // Test endpoints before proceeding
-  const testPaths = ['/test', '/app/test', '/app/agent/test'];
-  for (const path of testPaths) {
-    const ok = await checkTestEndpoint(path);
-    if (!ok) {
-      console.error('Aborting due to failed test endpoint:', path);
-      return;
-    }
-  }
-
   const nonce = BigInt(1); // You may need to fetch this from your contract/backend
   const deadline = BigInt(Math.floor(Date.now() / 1000) + 3600);
-
-  // Fetch from Neynar bulk endpoint before transfer
-  try {
-    const neynarUrl = `http://localhost:3000/v2/farcaster/user/bulk?fids=${fid.toString()}`;
-    const neynarResp = await fetch(neynarUrl, {
-      headers: { 'x-api-key': NEYNAR_API_KEY },
-    });
-    const neynarData = await neynarResp.json();
-    console.log('Neynar bulk user response:', neynarData);
-  } catch (err) {
-    console.error('Error fetching Neynar bulk user:', err);
-  }
 
   const account = privateKeyToAccount(PRIVATE_KEY);
   const messageHash = getTransferMessage(fid, to_custody_address, nonce, deadline);
