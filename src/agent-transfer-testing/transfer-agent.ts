@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
-import { keccak256, toBytes, encodeAbiParameters, parseAbiParameters, type Address } from 'viem';
+import { keccak256, toBytes, encodeAbiParameters, parseAbiParameters, type Address, createPublicClient, http } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
+import { optimism } from 'viem/chains';
 config();
 
 // --------- CONFIGURE THESE VALUES ----------
@@ -31,6 +32,35 @@ const ID_REGISTRY_TRANSFER_TYPE = [
   { name: 'deadline', type: 'uint256' },
 ] as const;
 
+const idRegistryABI = [
+  {
+    "inputs": [
+      { "internalType": "address", "name": "owner", "type": "address" }
+    ],
+    "name": "nonces",
+    "outputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+];
+
+const client = createPublicClient({
+  chain: optimism,
+  transport: http('http://localhost:8545'), // Use local Hardhat node
+});
+
+async function fetchNonce(address: string) {
+  const nonce = await client.readContract({
+    address: ID_REGISTRY_ADDRESS,
+    abi: idRegistryABI,
+    functionName: 'nonces',
+    args: [address],
+  });
+  return BigInt(nonce as string);
+}
+
 async function main() {
   // Polyfill fetch for Node.js < 18
   if (typeof fetch === 'undefined') {
@@ -38,10 +68,21 @@ async function main() {
     global.fetch = (await import('node-fetch')).default;
   }
 
-  const nonce = BigInt(1); // You may need to fetch this from your contract/backend
-  const deadline = BigInt(Math.floor(Date.now() / 1000) + 3600);
-
   const account = privateKeyToAccount(PRIVATE_KEY);
+  // Fetch the nonce for the current custody address
+  const custodyAddress = account.address;
+  const nonce = await fetchNonce(custodyAddress);
+  // Set deadline to current block number + 5
+  const currentBlock = await client.getBlockNumber();
+  const deadline = currentBlock + BigInt(5);
+
+  console.log('Message Data:', {
+      fid: fid.toString(),
+      to: to_custody_address,
+      nonce: nonce.toString(),
+      deadline: deadline.toString(),
+    }
+  )
   // EIP-712 typed data signing
   const signature = await account.signTypedData({
     domain: ID_REGISTRY_EIP_712_DOMAIN,
