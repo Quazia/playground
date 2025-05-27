@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import { keccak256, toBytes, encodeAbiParameters, parseAbiParameters } from 'viem';
+import { keccak256, toBytes, encodeAbiParameters, parseAbiParameters, type Address } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 config();
 
@@ -16,14 +16,20 @@ if (!fid || !to_custody_address || !PRIVATE_KEY || !NEYNAR_API_KEY || !signer_uu
   throw new Error('Missing required environment variables.');
 }
 
-function getTransferMessage(fid: bigint, to: `0x${string}`, nonce: bigint, deadline: bigint) {
-  return keccak256(
-    encodeAbiParameters(
-      parseAbiParameters('uint256 fid, address to, uint256 nonce, uint256 deadline'),
-      [fid, to, nonce, deadline]
-    )
-  );
-}
+const ID_REGISTRY_ADDRESS = '0x00000000Fc6c5F01Fc30151999387Bb99A9f489b';
+const ID_REGISTRY_EIP_712_DOMAIN = {
+  name: 'Farcaster IdRegistry',
+  version: '1',
+  chainId: 10,
+  verifyingContract: ID_REGISTRY_ADDRESS,
+} as const;
+
+const ID_REGISTRY_TRANSFER_TYPE = [
+  { name: 'fid', type: 'uint256' },
+  { name: 'to', type: 'address' },
+  { name: 'nonce', type: 'uint256' },
+  { name: 'deadline', type: 'uint256' },
+] as const;
 
 async function main() {
   // Polyfill fetch for Node.js < 18
@@ -36,8 +42,19 @@ async function main() {
   const deadline = BigInt(Math.floor(Date.now() / 1000) + 3600);
 
   const account = privateKeyToAccount(PRIVATE_KEY);
-  const messageHash = getTransferMessage(fid, to_custody_address, nonce, deadline);
-  const signature = await account.signMessage({ message: { raw: toBytes(messageHash) } });
+  // EIP-712 typed data signing
+  const signature = await account.signTypedData({
+    domain: ID_REGISTRY_EIP_712_DOMAIN,
+    types: { Transfer: ID_REGISTRY_TRANSFER_TYPE },
+    primaryType: 'Transfer',
+    message: {
+      fid,
+      to: to_custody_address,
+      nonce,
+      deadline,
+    },
+  });
+
   const TRANSFER_URL = `${API_URL}/app/agent/transfer`;
   try {
     const response = await fetch(TRANSFER_URL, {
@@ -51,6 +68,7 @@ async function main() {
         signature,
         to_custody_address,
         signer_uuid,
+        deadline: deadline.toString(),
       }),
     });
 
