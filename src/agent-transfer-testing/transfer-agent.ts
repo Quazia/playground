@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import { keccak256, toBytes, encodeAbiParameters, parseAbiParameters, type Address, createPublicClient, http } from 'viem';
+import { createPublicClient, http } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { optimism } from 'viem/chains';
 config();
@@ -48,9 +48,10 @@ const idRegistryABI = [
 
 const client = createPublicClient({
   chain: optimism,
-  transport: http('http://localhost:8545'), // Use local Hardhat node
+  transport: http('http://localhost:8545'), // Use local Hardhat node - in production, use the actual Optimism RPC URL
 });
 
+// We get the nonce from the IdRegistry contract - NOT the account nonce
 async function fetchNonce(address: string) {
   const nonce = await client.readContract({
     address: ID_REGISTRY_ADDRESS,
@@ -62,7 +63,7 @@ async function fetchNonce(address: string) {
 }
 
 async function main() {
-  // Polyfill fetch for Node.js < 18
+
   if (typeof fetch === 'undefined') {
     // @ts-ignore
     global.fetch = (await import('node-fetch')).default;
@@ -72,9 +73,10 @@ async function main() {
   // Fetch the nonce for the current custody address
   const custodyAddress = account.address;
   const nonce = await fetchNonce(custodyAddress);
-  // Set deadline to current block number + 5
+  // Set deadline to current block number + buffer
+  // This shoud be much lower in production, maybe 1000 blocks
   const currentBlock = await client.getBlockNumber();
-  const deadline = currentBlock + BigInt(5);
+  const deadline = currentBlock + BigInt(1000000000000000000);
 
   console.log('Message Data:', {
       fid: fid.toString(),
@@ -84,6 +86,7 @@ async function main() {
     }
   )
   // EIP-712 typed data signing
+  // Very important that it's structure just like this
   const signature = await account.signTypedData({
     domain: ID_REGISTRY_EIP_712_DOMAIN,
     types: { Transfer: ID_REGISTRY_TRANSFER_TYPE },
