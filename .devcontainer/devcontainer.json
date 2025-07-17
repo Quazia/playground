@@ -1,0 +1,97 @@
+{
+  "name": "Farcaster Playground Dev Environment",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "devcontainer",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+
+  // Features to install in the dev container
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "nodeGypDependencies": true,
+      "version": "18"
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+
+  // Configure tool-specific properties
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-json",
+        "ms-vscode.hexeditor",
+        "ms-python.python",
+        "ms-vscode.vscode-docker",
+        "ckolkman.vscode-postgres",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+        "nomic.solidity",
+        "ConsenSys.truffle-for-vscode",
+        "ms-vscode.remote-containers",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "typescript.preferences.quoteStyle": "single",
+        "editor.formatOnSave": true,
+        "solidity.defaultCompiler": "remote",
+        "solidity.compileUsingRemoteVersion": "latest",
+        "files.associations": {
+          "*.sol": "solidity"
+        },
+        "sqltools.connections": [
+          {
+            "name": "Shovel Test DB",
+            "driver": "PostgreSQL",
+            "previewLimit": 50,
+            "server": "postgres",
+            "port": 5432,
+            "database": "shovel_test",
+            "username": "shovel",
+            "password": "shovel_password"
+          }
+        ]
+      }
+    }
+  },
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally
+  "forwardPorts": [3000, 5433, 8080, 8545],
+  "portsAttributes": {
+    "3000": {
+      "label": "API Server"
+    },
+    "5433": {
+      "label": "PostgreSQL"
+    },
+    "8080": {
+      "label": "Adminer"
+    },
+    "8545": {
+      "label": "Hardhat Node"
+    }
+  },
+
+  // Use 'postCreateCommand' to run commands after the container is created
+  "postCreateCommand": ".devcontainer/post-create.sh",
+
+  // Use 'postStartCommand' to run commands after the container starts
+  "postStartCommand": "npm install",
+
+  // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root
+  "remoteUser": "node",
+
+  // Environment variables
+  "containerEnv": {
+    "NODE_ENV": "development"
+  },
+
+  // Mounts
+  "mounts": [
+    "source=${localWorkspaceFolder}/.env,target=/workspace/.env,type=bind,consistency=cached"
+  ]
+}

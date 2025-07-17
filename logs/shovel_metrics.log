@@ -1,0 +1,134 @@
+[0;32m[METRICS][0m Setting up metrics tables...
+[0;32m[METRICS][0m Metrics tables created successfully
+[0;32m[METRICS][0m Starting Shovel metrics monitoring...
+[0;32m[METRICS][0m Metrics will be logged to: /workspace/logs/shovel_metrics.log
+[0;32m[METRICS][0m Press Ctrl+C to stop monitoring
+[0;32m[METRICS][0m Setting up metrics tables...
+[0;32m[METRICS][0m Metrics tables created successfully
+timestamp,table_size,row_count,latest_block,earliest_block,avg_bytes_per_event,events_per_minute
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:12:46 UTC 2025
+2025-07-08 19:12:46,,,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: , Events: , Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 84.832MB, CPU: 3.0%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:13:17 UTC 2025
+2025-07-08 19:13:17,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 94.3594MB, CPU: 0.0%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:13:47 UTC 2025
+2025-07-08 19:13:47,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 94.4844MB, CPU: 1.2%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:14:17 UTC 2025
+2025-07-08 19:14:17,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 94.4844MB, CPU: 0.6%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:14:48 UTC 2025
+2025-07-08 19:14:48,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 94.4844MB, CPU: 0.6%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:15:18 UTC 2025
+2025-07-08 19:15:18,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 94.4844MB, CPU: 0.0%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:15:48 UTC 2025
+2025-07-08 19:15:48,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 96.6562MB, CPU: 0.6%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:16:18 UTC 2025
+2025-07-08 19:16:18,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 96.6562MB, CPU: 0.6%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:16:49 UTC 2025
+2025-07-08 19:16:49,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 96.7812MB, CPU: 0.0%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:17:19 UTC 2025
+2025-07-08 19:17:19,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 99.4062MB, CPU: 0.6%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:17:49 UTC 2025
+2025-07-08 19:17:49,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 99.4062MB, CPU: 0.0%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:18:20 UTC 2025
+2025-07-08 19:18:20,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 99.4062MB, CPU: 4.2%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:18:50 UTC 2025
+2025-07-08 19:18:50,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 99.4062MB, CPU: 0.0%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:19:20 UTC 2025
+2025-07-08 19:19:20,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 99.4062MB, CPU: 0.0%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:19:51 UTC 2025
+2025-07-08 19:19:51,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 97.9922MB, CPU: 0.0%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:20:21 UTC 2025
+2025-07-08 19:20:21,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 97.9922MB, CPU: 0.0%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:20:51 UTC 2025
+2025-07-08 19:20:51,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 97.9922MB, CPU: 0.0%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:21:22 UTC 2025
+2025-07-08 19:21:22,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 97.9922MB, CPU: 0.6%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:21:52 UTC 2025
+2025-07-08 19:21:52,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 97.6914MB, CPU: 0.6%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:22:22 UTC 2025
+2025-07-08 19:22:22,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 97.6914MB, CPU: 1.2%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...
+[0;32m[METRICS][0m Collecting metrics at Tue Jul  8 19:22:52 UTC 2025
+2025-07-08 19:22:52,16 kB,0,,,N/A,0
+[0;34m[METRICS][0m DB Metrics - Size: 16 kB, Events: 0, Latest Block: , Avg Bytes/Event: N/A, Rate: 0 events/min
+[0;34m[METRICS][0m Block Metrics - Blocks/min: 0, Avg Events/Block: 
+[0;34m[METRICS][0m System Metrics - Shovel Memory: 97.6914MB, CPU: 0.0%, Disk: %
+[0;32m[METRICS][0m Sleeping for 30 seconds...

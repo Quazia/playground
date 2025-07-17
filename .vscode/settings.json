@@ -1,0 +1,17 @@
+{
+  "workbench.colorTheme": "Default Dark+",
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": false,
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/cache/**": true,
+    "**/broadcast/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/cache": true,
+    "**/broadcast": true,
+    "**/dependencies": true
+  }
+}

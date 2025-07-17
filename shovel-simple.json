@@ -1,0 +1,63 @@
+{
+  "pg_url": "postgres://shovel:shovel_password@localhost:5433/shovel_test",
+  "eth_sources": [
+    {
+      "name": "mainnet",
+      "chain_id": 1,
+      "url": "https://eth-mainnet.g.alchemy.com/v2/demo"
+    }
+  ],
+  "integrations": [
+    {
+      "name": "erc20_transfers",
+      "sources": [{"name": "mainnet"}],
+      "table": {
+        "name": "erc20_transfers",
+        "columns": [
+          {"name": "chain_id", "type": "numeric"},
+          {"name": "block_num", "type": "numeric"},
+          {"name": "tx_hash", "type": "text"},
+          {"name": "log_idx", "type": "numeric"},
+          {"name": "contract_address", "type": "text"},
+          {"name": "from_address", "type": "text"},
+          {"name": "to_address", "type": "text"},
+          {"name": "value", "type": "numeric"}
+        ]
+      },
+      "block": [
+        {"name": "chain_id", "column": "chain_id"},
+        {"name": "block_num", "column": "block_num"}
+      ],
+      "transaction": [
+        {"name": "tx_hash", "column": "tx_hash"}
+      ],
+      "log": [
+        {"name": "log_addr", "column": "contract_address"},
+        {"name": "log_idx", "column": "log_idx"}
+      ],
+      "event": {
+        "name": "Transfer",
+        "inputs": [
+          {
+            "indexed": true,
+            "name": "from",
+            "type": "address",
+            "column": "from_address"
+          },
+          {
+            "indexed": true,
+            "name": "to",
+            "type": "address",
+            "column": "to_address"
+          },
+          {
+            "indexed": false,
+            "name": "value",
+            "type": "uint256",
+            "column": "value"
+          }
+        ]
+      }
+    }
+  ]
+}

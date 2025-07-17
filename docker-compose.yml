@@ -1,0 +1,61 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: shovel-test-db
+    environment:
+      POSTGRES_DB: shovel_test
+      POSTGRES_USER: shovel
+      POSTGRES_PASSWORD: shovel_password
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init-db:/docker-entrypoint-initdb.d
+    networks:
+      - shovel-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shovel -d shovel_test"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    image: adminer:latest
+    container_name: shovel-adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - shovel-network
+    depends_on:
+      - postgres
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+
+  devcontainer:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    container_name: farcaster-playground-dev
+    volumes:
+      - .:/workspace:cached
+      - node_modules:/workspace/node_modules
+      - /var/run/docker.sock:/var/run/docker-host.sock
+    networks:
+      - shovel-network
+    depends_on:
+      - postgres
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://shovel:shovel_password@postgres:5432/shovel_test
+    command: sleep infinity
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
+  node_modules:
+
+networks:
+  shovel-network:
+    driver: bridge
